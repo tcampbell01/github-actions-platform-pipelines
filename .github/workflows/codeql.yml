@@ -4,23 +4,30 @@ on:
   push:
     branches: ["main"]
   schedule:
-    - cron: "17 3 * * 1" # weekly
+    - cron: "17 3 * * 1"
 
 permissions:
-  security-events: write
   contents: read
+  security-events: write
 
 jobs:
   analyze:
     name: CodeQL
     runs-on: ubuntu-latest
+
     strategy:
       fail-fast: false
       matrix:
         language: ["python"]
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: github/codeql-action/init@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
-      - uses: github/codeql-action/analyze@v3
+
+      - name: Analyze
+        uses: github/codeql-action/analyze@v3

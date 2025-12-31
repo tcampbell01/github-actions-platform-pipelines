@@ -6,16 +6,15 @@ on:
       python-version:
         type: string
         default: "3.11"
-      run-codeql:
-        type: boolean
-        default: false
 
 permissions:
   contents: read
 
 jobs:
   build-test:
+    name: Build and Test
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,7 +24,7 @@ jobs:
         with:
           python-version: ${{ inputs.python-version }}
 
-      - name: Install
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -e ".[dev]"
@@ -33,14 +32,15 @@ jobs:
       - name: Lint (ruff)
         run: ruff check .
 
-      - name: Tests (pytest)
+      - name: Run tests
         run: pytest -q
 
       - name: Package source as artifact
         run: |
           mkdir -p dist
           tar -czf dist/source.tgz .
-      - name: Upload CI artifact
+      
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: source
