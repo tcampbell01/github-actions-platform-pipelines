@@ -1,11 +1,11 @@
-# github-actions-platform-pipelines# 
+# github-actions-platform-pipelines
 
 A template repo showing how to standardize CI/CD across teams using GitHub Actions.
 
 ## What it shows
 - **Platform thinking**: one reusable CI workflow teams can consume
 - **Automation mindset**: dependency review, CodeQL, publish on tags
-- **Developer experience**: fast PR feedback, clear adoption steps
+- **Developer experience**: fast PR feedback, clear adoption steps, manual runs for debugging
 
 ## Core features
 - GitHub Actions workflows:
@@ -14,11 +14,19 @@ A template repo showing how to standardize CI/CD across teams using GitHub Actio
   - Artifact publishing (publish container image to GHCR on version tags)
 - Reusable workflow via `workflow_call`
 - PR vs main separation
+- Dependabot configuration (`.github/dependabot.yml`)
+- CODEOWNERS support (optional but recommended)
 
-## How teams adopt this
-1. Copy `.github/workflows/*` into your repo (or use it as a template repo).
-2. Keep your repo-specific build/test logic inside the reusable workflow steps (or call `make test`).
-3. Standardize secrets and publishing policy via org-level conventions.
+## Quickstart (local)
+```bash
+python3.11 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -e ".[dev]"
+
+ruff check .
+pytest -q
+```
 
 See: `docs/adoption-guide.md`
 
@@ -31,3 +39,4 @@ flowchart TD
   Main[Push to main] --> CI2[Reusable CI: lint + test]
   Main --> CQ[CodeQL]
   Tag[Tag vX.Y.Z] --> PUB[Publish image to GHCR]
+```
