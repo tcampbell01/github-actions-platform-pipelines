@@ -41,7 +41,7 @@ jobs:
           tar -czf dist/source.tgz .
       
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: source
           path: dist/source.tgz
